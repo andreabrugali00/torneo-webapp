@@ -18,7 +18,8 @@ export const getUsersById = async (req, res) => {
     const { id } = req.params
     //const foundUser = users.find((user) => user.id == id)
     //res.send(foundUser)
-    const result = await pool.query(`SELECT * FROM users WHERE id = ${id}`)
+    //NON va bene è poco sicuro const result = await pool.query(`SELECT * FROM users WHERE id = ${id}`)
+    const result = await pool.query('SELECT * FROM users WHERE id = $1', [id])
     console.log(result.rowCount)
     if(result.rowCount > 0){
       res.json(result.rows)

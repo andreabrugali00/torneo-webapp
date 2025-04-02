@@ -1,5 +1,23 @@
 import pool from '../src/db/index.js';
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+
+const JWT_SECRET = 'svsdhjdlawdehgdbldbDB'
+export const login = async(req,res) => {
+    const {email, password} = req.body
+    const query = "SELECT * FROM users WHERE email = $1";
+    const params = [email]
+    const result = await pool.query(query, params)
+    const findUser = result.rows[0];
+    if(!findUser) return res.status(404).json({status: 'error', message: 'Utente / password errata'})
+    
+    if(await bcrypt.compare(password, findUser.password)){
+        const token = jwt.sign({ id: findUser.id, email: findUser.email}, JWT_SECRET)
+        return res.json({status: 'ok', data: token})
+    }
+    
+    res.status(401).json({status: 'error', message: 'Utente / password errata'})
+}
 
 export const register = async (req, res) => {
     const { nome, cognome, email, password, ruolo } = req.body
