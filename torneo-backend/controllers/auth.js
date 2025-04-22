@@ -31,6 +31,9 @@ export const register = async (req, res) => {
 
     try {
         const result = await pool.query(insertQuery, [nome, cognome, email, passwordHashed, ruolo])
+        if (password.length < 3) {
+            return res.json({ status: 'error', message: 'Password troppo corta!' })
+        }
         if (!result.rows.length) {
             return res.json({message: "Utente già registrato!"});
         }
@@ -39,10 +42,7 @@ export const register = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Errore del server' });
     }
-    res.send("registrazione")
+    return res.json({status: 'ok', message:"utente registrato correttamente"})
 
-    if (password.length < 3) {
-        res.json({ status: 'error', message: 'Password troppo corta!' })
-    }
 
 };
