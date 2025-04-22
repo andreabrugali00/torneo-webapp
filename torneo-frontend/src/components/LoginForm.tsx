@@ -25,13 +25,12 @@ export default function LoginForm() {
         }
     }
     return (
-        <div>
+        <div className="flex flex-col space-y-4">
             <InputComponent type="text" text="Email" Icon={UserIcon} onChange={(e)=>setEmail(e.target.value)}></InputComponent>
-            <br />
             <InputComponent type="password" text="Password" Icon={LockClosedIcon} onChange={(e) => setPassword(e.target.value)}></InputComponent>
             {error && <p className="text-red-500">{error}</p>}
-            <br />
             <ButtonComponent text="Entra" onClick={() => checkCredentials()}></ButtonComponent>
+            <p onClick={() => router.push('./Register')}>Non sei ancora registrato? clicca qui!</p>
         </div>
     )
 }
