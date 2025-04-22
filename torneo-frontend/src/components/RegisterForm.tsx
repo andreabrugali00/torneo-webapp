@@ -1,8 +1,9 @@
 'use client'
-import React, { useState } from "react";
-import InputComponent from "./Input";
-import { ArrowRightEndOnRectangleIcon, UserIcon } from "@heroicons/react/16/solid";
+import React from "react";
+import { useForm } from "react-hook-form";
+import InputComponent from "./InputRef";
 import ButtonComponent from "./Button";
+import { UserIcon } from "@heroicons/react/16/solid";
 
 type FormValues = {
     nome: string;
@@ -13,34 +14,15 @@ type FormValues = {
 }
 
 export const RegisterForm: React.FC = () => {
-    const [formValues, setFormValues] = useState<FormValues>({
-        nome: '',
-        cognome: '',
-        password: '',
-        email: '',
-        ruolo: '',
-    })
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormValues(prevState => ({
-            ...prevState,
-            [name]: value
-        }))
-    }
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log(formValues)
+    const {register, handleSubmit, formState: {errors}} = useForm<FormValues>();
+    const onSubmit = (data: FormValues) => {
+        console.log(data)
     }
     return (
-            <form onSubmit={handleSubmit}  className="flex flex-col gap-4">
-                <InputComponent name='nome' type='text' text='Nome' Icon={UserIcon} onChange={handleChange} value={formValues.nome}></InputComponent>
-                <InputComponent name='cognome' type='text' text='Cognome' Icon={UserIcon} onChange={handleChange} value={formValues.cognome}></InputComponent>
-                <InputComponent name='email' type='text' text='Email' Icon={UserIcon} onChange={handleChange} value={formValues.email}></InputComponent>
-                <InputComponent name='password' type='password' text='Password' Icon={UserIcon} onChange={handleChange} value={formValues.password}></InputComponent>
-                <InputComponent name='ruolo' type='text' text='Ruolo' Icon={UserIcon} onChange={handleChange} value={formValues.ruolo}></InputComponent>
-                <ButtonComponent type='submit' text='Registrati' ></ButtonComponent>
-            </form>
-
-    )
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <InputComponent type='text' text='Nome' Icon={UserIcon} {...register('nome', { required: true })}></InputComponent>
+        {errors.nome && <span>Nome obbligatorio</span>}
+        <ButtonComponent type='submit' text='Registrati' ></ButtonComponent>
+    </form>
+    ) 
 }

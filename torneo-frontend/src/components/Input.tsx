@@ -6,7 +6,7 @@ interface InputProps {
     Icon: ComponentType<React.SVGProps<SVGSVGElement>>, // Icona come componente
     type: string,
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    value: string;
+    value?: string,
 }
 
 export default function InputComponent({ name, text, Icon, type, onChange, value}: InputProps) {
