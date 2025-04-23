@@ -13,7 +13,8 @@ export const login = async(req,res) => {
     
     if(await bcrypt.compare(password, findUser.password)){
         const token = jwt.sign({ id: findUser.id, email: findUser.email}, JWT_SECRET)
-        return res.json({status: 'ok', data: token})
+        console.log('token', token)
+        return res.status(200).json({   status: 'ok', message: 'Login effettuato con successo', token, user: findUser})
     }
     
     res.status(401).json({status: 'error', message: 'Utente / password errata'})
